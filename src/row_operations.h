@@ -2,15 +2,18 @@
 #define ROW_OPERATIONS_H
 
 #ifdef ROW_OPERATIONS_IMPL
+  #ifdef _WIN32
+  #else
+  #endif
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include "utils/editor.h"
+  #include "utils/globals.h"
 #endif
-#include "types.h"
+#include "utils/types.h"
+#include "utils/editor.h"
 
-typedef struct Erow {
-	u32 size;
-	u32 rsize;
-	char *data;
-	char *render;
-} Erow;
 
 /*** forward declarations ***/
 void row_insert(u32 at, const char *s, u32 l);

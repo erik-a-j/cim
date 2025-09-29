@@ -2,6 +2,16 @@
 #include <termios.h>
 #include <unistd.h>
 #include <ctype.h>
+#include <stdint.h>
+
+typedef int8_t i8;
+typedef int16_t i16;
+typedef int32_t i32;
+typedef int64_t i64;
+typedef uint8_t u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef uint64_t u64;
 
 #define clear() write(STDOUT_FILENO, "\x1b[2J", 4)
 #define restore_cursor_pos() write(STDOUT_FILENO, "\x1b[H", 3)
@@ -41,6 +51,8 @@ int getCursorPosition(int *rows, int *cols) {
 
 	return 0;
 }
+
+
 int main() {
   enable_raw_mode();
   write(STDOUT_FILENO, "\x1b[?1049h", 8);
@@ -61,4 +73,5 @@ int main() {
   write(STDOUT_FILENO, "\x1b[?1049l", 8);
 
   disable_raw_mode();
+	return 0;
 }

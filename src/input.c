@@ -1,5 +1,6 @@
 #define INPUT_IMPL
-#include "main.h"
+#define g_ECONFIG
+#include "input.h"
 
 /*** input ***/
 char *input_prompt(char *prompt) {

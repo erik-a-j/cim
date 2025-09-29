@@ -1,6 +1,7 @@
 #define FILE_IO_IMPL
-#include "main.h"
-
+#define g_ECONFIG
+#include "file_io.h"
+ 
 /*** file i/o ***/
 void fileio_open(const char *filename) {
 	free(E.filename);

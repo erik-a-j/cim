@@ -1,5 +1,6 @@
 #define OUTPUT_IMPL
-#include "main.h"
+#define g_ECONFIG
+#include "output.h"
 
 /*** output ***/
 void output_scroll() {

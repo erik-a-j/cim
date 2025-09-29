@@ -2,7 +2,7 @@ SRCDIR := src
 OBJDIR := build
 
 CC      := gcc
-CFLAGS  := -Wall -Wextra -pedantic -fanalyzer -Wanalyzer-null-dereference -g -O0 -std=gnu11 -MMD -MP
+CFLAGS  := -Wall -Wextra -Winline -pedantic -fanalyzer -Wanalyzer-null-dereference -g -O0 -std=gnu11 -MMD -MP
 LDFLAGS :=
 LDLIBS  :=
 

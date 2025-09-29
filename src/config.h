@@ -2,12 +2,18 @@
 #define CONFIG_H
 
 #ifdef CONFIG_IMPL
+  #ifdef _WIN32
+  #else
+  #endif
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include "buf.h"
+  #include "utils/globals.h"
 #endif
-#include "types.h"
+#include "utils/types.h"
 
-typedef struct CimRC {
-	u8 tabsize;
-} CimRC;
+
 
 /*** forward declarations ***/
 const char *config_find();

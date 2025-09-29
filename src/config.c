@@ -1,5 +1,6 @@
 #define CONFIG_IMPL
-#include "main.h"
+#define g_CIMRC
+#include "config.h"
 
 /*** config ***/
 const char *config_find() {

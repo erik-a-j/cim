@@ -1,5 +1,7 @@
 #define ROW_OPERATIONS_IMPL
-#include "main.h"
+#define g_CIMRC
+#define g_ECONFIG
+#include "row_operations.h"
 
 /*** row operations ***/
 void row_insert(u32 at, const char *s, u32 len) {

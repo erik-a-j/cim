@@ -1,5 +1,5 @@
 #define BUF_IMPL
-#include "main.h"
+#include "buf.h"
 
 /*** append buffer ***/
 void ab_init(abuf *ab, u64 size) {

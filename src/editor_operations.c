@@ -1,5 +1,6 @@
 #define EDITOR_OPERATIONS_IMPL
-#include "main.h"
+#define g_ECONFIG
+#include "editor_operations.h"
 
 /*** editor operations ***/
 void editor_insert_char(int c) {

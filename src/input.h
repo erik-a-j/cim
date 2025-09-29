@@ -2,9 +2,20 @@
 #define INPUT_H
 
 #ifdef INPUT_IMPL
+  #ifdef _WIN32
+  #else
+  #endif
+  #include <stdio.h>
+  #include <stdlib.h>
   #include <ctype.h>
+  #include "file_io.h"
+  #include "output.h"
+  #include "editor_operations.h"
+  #include "utils/editor.h"
+  #include "utils/util.h"
+  #include "utils/globals.h"
 #endif
-#include "types.h"
+#include "utils/types.h"
 
 /*** forward declarations ***/
 char *input_prompt(char *s);

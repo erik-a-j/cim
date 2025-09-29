@@ -1,5 +1,5 @@
 #define CURSOR_IMPL
-#include "main.h"
+#include "cursor.h"
 
 int cursor_get_pos(int *y, int *x) {
 	char buf[32];

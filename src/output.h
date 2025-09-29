@@ -2,9 +2,17 @@
 #define OUTPUT_H
 
 #ifdef OUTPUT_IMPL
+  #ifdef _WIN32
+  #else
+    #include <unistd.h>
+  #endif
+  #include <stdio.h>
   #include <stdarg.h>
+  #include <string.h>
   #include <time.h>
-  #include <unistd.h>
+  #include "buf.h"
+  #include "row_operations.h"
+  #include "utils/globals.h"
 #endif
 
 /*** forward declarations ***/
