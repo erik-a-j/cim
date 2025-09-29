@@ -1,8 +1,6 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-typedef struct _IO_FILE FILE;
-
 /*** global variables ***/
 #if defined(g_TERM) || defined(g_ALL)
 #ifdef _WIN32
@@ -25,6 +23,7 @@ typedef struct _IO_FILE FILE;
   extern CimRC RC;
 #endif /*defined(g_CIMRC) || defined(g_ALL)*/
 
+#include <stdio.h>
 extern FILE *logfp;
 
 #endif /*GLOBALS_H*/

@@ -23,8 +23,8 @@ typedef struct abuf {
 
 /*** forward declarations ***/
 void ab_init(abuf *ab, u64 size);
-void ab_append(abuf *ab, const char *s, u64 l);
-void ab_fmt_append(abuf *ab, const char *fmt, ...);
+int ab_append(abuf *ab, const char *s, u64 l);
+int ab_fmt_append(abuf *ab, const char *fmt, ...);
 void ab_free(abuf *ab);
 
 #endif /*BUF_H*/

@@ -12,77 +12,85 @@
   #include "buf.h"
   #include "cursor.h"
   #include "utils/globals.h"
-  #define BOX_ZERO_(x) do {                   \
-    Box *x__ = _Generic((x),                  \
-        Box*: (x),                            \
-        Box: &(x)                             \
-    );                                        \
-    x__->box_cols = x__->box_rows = 0;        \
-    x__->corner.lb = x__->corner.lt = '\0';   \
-    x__->corner.rt = x__->corner.rb = '\0';   \
-    x__->line.v = x__->line.h = '\0';         \
-    x__->fg[0] = x__->fg[1] = x__->fg[2] = 0; \
-    x__->bg[0] = x__->bg[1] = x__->bg[2] = 0; \
-  } while (0)
-  #define BOXINTERNAL_ZERO_(x) do {  \
-    BoxInternal *x__ = _Generic((x), \
-        BoxInternal*: (x),           \
-        BoxInternal: &(x)            \
-    );                               \
-    x__->box_sy = 0;          \
-    x__->box_sx = 0;          \
-  } while (0)
 #endif /*BOX_IMPL*/
 #include "box_flags.h"
 #include "utils/types.h"
 
+#define BOX_T_PROMPT_SIZE 256
+#define BOX_T_INPUT_T_SIZE 64
+#define BOX_T_INPUT_T_STR_SIZE 64
+#define BOX_T_INPUT_T_YN_SIZE 32
+
 typedef struct abuf abuf;
-typedef struct Box {
-  abuf ab;
-  u32 box_rows;
-  u32 box_cols;
-  struct {
+typedef struct box_t{
+  char prompt[BOX_T_PROMPT_SIZE];
+  u32 height;
+  u32 width;
+  u64 flags;
+  u8 fg[3];
+  u8 bg[3];
+  struct box_corner_char_t {
     char lb;
     char lt;
     char rt;
     char rb;
   } corner;
-  struct {
+  struct box_line_char_t {
     char v;
     char h;
   } line;
-  char prompt[256];
-  u64 flags;
-  u8 fg[3];
-  u8 bg[3];
-} Box;
-typedef struct BoxInternal {
-  Box *st;
-  u32 box_sy;
-  u32 box_sx;
-} BoxInternal;
+  struct box_internal_t {
+    abuf ab;
+    u32 box_sy;
+    u32 box_sx;
+    struct box_input_t {
+      union {
+        struct {
+          char str[BOX_T_INPUT_T_STR_SIZE];
+        };
+        struct {
+          char y[BOX_T_INPUT_T_YN_SIZE];
+          char n[BOX_T_INPUT_T_YN_SIZE];
+        } yn;
+        char raw[BOX_T_INPUT_T_SIZE];
+      };
+    } in_t;
+  } _;
+} box_t;
+
 
 /*** forward declarations ***/
-void box_init(Box *st);
-void box_free(Box *st);
-void box_set_prompt(Box *st, const char *fmt, ...);
-void box_compute(Box *st);
-void box_draw_line(BoxInternal *box, u32 len);
-void box_draw(BoxInternal *box);
+void box_init(box_t *st);
+void box_free(box_t *st);
+void box_set_prompt(box_t *st, const char *fmt, ...);
+int box_compute(box_t *st);
 
 #ifdef BOX_IMPL
-static inline void box_flags_inv_color(BoxInternal *box) {
-  ab_append(&box->st->ab, "\x1b[7m", 4);
+#define box_apply(flag) box_apply_##flag
+static inline int box_apply(B_COLOR_INV)(box_t *st);
+static inline int box_apply(B_CENTERED)(box_t *st);
+static inline int box_apply(B_IN_T_YN)(box_t *st);
+
+
+static inline void box_draw_line(box_t *st, u32 len) {
+  while (len) {
+    ab_append(&st->_.ab, " ", 1);
+    --len;
+  }
 }
-static inline void box_flags_centered(BoxInternal *box) {
-  Box *st = box->st;
-  if (st->box_rows > E.scr_rows) st->box_rows = E.scr_rows;
-  if (st->box_cols > E.scr_cols) st->box_cols = E.scr_cols;
-  u32 margin_rows = E.scr_rows - st->box_rows;
-  u32 margin_cols = E.scr_cols - st->box_cols;
-  box->box_sy = (margin_rows)? margin_rows / 2 : 0;
-  box->box_sx = (margin_cols)? margin_cols / 2 : 0;
+static inline void box_draw(box_t *st) {
+  for (u32 y = st->_.box_sy; y != st->_.box_sy + st->height; y++) {
+    cursor_move(&st->_.ab, y, st->_.box_sx);
+    box_draw_line(st, st->width);
+  }
 }
+
+#define if_flag_and_apply(flag) do { \
+  if (st->flags & flag) { \
+    int err = box_apply(flag)(st); \
+    if (err) return err; \
+  } \
+} while (0)
 #endif /*BOX_IMPL*/
 
 #endif /*POPUP_H*/

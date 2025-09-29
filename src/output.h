@@ -10,6 +10,7 @@
   #include <stdarg.h>
   #include <string.h>
   #include <time.h>
+  #include "utils/portable.h"
   #include "buf.h"
   #include "row_operations.h"
   #include "utils/globals.h"

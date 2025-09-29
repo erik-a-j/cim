@@ -10,11 +10,11 @@ const char *config_find() {
 
 	FILE *fp;
 	fp = fopen(rc_here, "r");
-	if (fp) {
-		rc_path = rc_here;
-		fclose(fp);
-	}
+	if (!fp) return NULL;
 
+	rc_path = rc_here;
+	fclose(fp);
+	
 	return rc_path;
 }
 const char *config_get_value(const char *data, const char *setting) {
@@ -49,9 +49,9 @@ void config_init() {
 	ab_init(&ab, 64);
 
 	char *line = NULL;
-	u64 linecap = 0;
+	i64 linecap = 0;
 	i32 linelen;
-	while ((linelen = getline(&line, &linecap, fp)) != -1) {
+	while ((linelen = getline_p(&line, &linecap, fp)) != -1) {
 		LOG("%s\n", line);
 		ab_append(&ab, line, linelen);
 	}

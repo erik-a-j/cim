@@ -24,4 +24,6 @@
 #define NORMAL_KEY(k) ((k) + EM_NORMAL)
 #define NORMAL_CTRL_KEY(k) (NORMAL_KEY(CTRL_KEY((k))))
 
+
+
 #endif /*UTIL_H*/

@@ -11,6 +11,7 @@
   #include <stdlib.h>
   #include <string.h>
   #include <fcntl.h>
+  #include "utils/portable.h"
   #include "utils/editor.h"
   #include "row_operations.h"
   #include "input.h"

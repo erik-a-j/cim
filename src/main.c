@@ -47,12 +47,12 @@ int main(int argc, char *argv[]) {
 
 	output_set_statusmsg("HELP: Ctrl+S = save | Ctrl+Q = quit");
 
-		Box box;
+		box_t box;
 		box_init(&box);
 		//box_set_prompt(&box, "do you want to continue? %s/%s", "yes", "no");
-		box.box_rows = 10;
-		box.box_cols = 40;
-		box.flags |= (BOX_CENTERED |  BOX_INV_COLOR);
+		box.height = 10;
+		box.width = 40;
+		box.flags |= (B_CENTERED |  B_COLOR_INV);
 		box_compute(&box);
 		//LOG("%s\n", box.prompt);
 		LOG("%.*s\n", (int)box.ab.len, box.ab.b);

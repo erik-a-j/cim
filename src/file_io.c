@@ -11,9 +11,9 @@ void fileio_open(const char *filename) {
 	if (!fp) die("fopen");
 
 	char *line = NULL;
-	u64 linecap = 0;
+	i64 linecap = 0;
 	i32 linelen;
-	while ((linelen = getline(&line, &linecap, fp)) != -1) {
+	while ((linelen = getline_p(&line, &linecap, fp)) != -1) {
 		while (linelen > 0 && (line[linelen - 1] == '\n' ||
 													 line[linelen - 1] == '\r'))
 			--linelen;

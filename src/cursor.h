@@ -8,6 +8,7 @@
   #endif
   #include <stdio.h>
   #include <ctype.h>
+  #include "utils/portable.h"
   #include "buf.h"
 #endif
 #include "utils/types.h"

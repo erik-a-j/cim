@@ -8,6 +8,7 @@
   #include <stdio.h>
   #include <stdlib.h>
   #include <string.h>
+  #include "utils/portable.h"
   #include "buf.h"
   #include "utils/globals.h"
 #endif
