@@ -13,6 +13,6 @@
 /*** forward declarations ***/
 void editor_insert_char(int c);
 void editor_insert_newline();
-void editor_del_char(u32 *i);
+void editor_del_char(u32_t *i);
 
 #endif /*EDITOR_OPERATIONS_H*/

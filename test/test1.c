@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <stdint.h>
 
-typedef int8_t i8;
-typedef int16_t i16;
-typedef int32_t i32;
-typedef int64_t i64;
-typedef uint8_t u8;
-typedef uint16_t u16;
-typedef uint32_t u32;
-typedef uint64_t u64;
+typedef int8_t i8_t;
+typedef int16_t i16_t;
+typedef int32_t i32_t;
+typedef int64_t i64_t;
+typedef uint8_t u8_t;
+typedef uint16_t u16_t;
+typedef uint32_t u32_t;
+typedef uint64_t u64_t;
 
 #define NOF 0
 
@@ -29,9 +29,10 @@ const char *aaa[4] = {
 };
 
 int main() {
-	u64 a = 0;
+	u64_t a = 0;
+	printf("0 %% 2 = %d\n", 0 % 2);
 	a |= (AA | CC);
-	a &= (NOF);
+	if (~a & BB) printf("BB not set\n");
 	printf("%lu\n", a);
 	IS_FLAG(a, AA);
 	IS_FLAG(a, BB);

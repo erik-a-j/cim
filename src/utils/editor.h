@@ -4,7 +4,7 @@
 #include "util.h"
 
 typedef struct CimRC {
-	u8 tabsize;
+	u8_t tabsize;
 } CimRC;
 
 typedef enum Emode {
@@ -30,23 +30,23 @@ enum editor_key {
 };
 
 typedef struct Erow {
-	u32 size;
-	u32 rsize;
+	u32_t size;
+	u32_t rsize;
 	char *data;
 	char *render;
 } Erow;
 
 typedef struct EditorConfig {
 	Emode mode;
-	u32 cy;
-	u32 cx;
-	u32 rx;
-	u32 row_offset;
-	u32 col_offset;
-	u32 scr_rows;
-	u32 scr_cols;
-	u32 num_rows;
-	i64 dirty;
+	u32_t cy;
+	u32_t cx;
+	u32_t rx;
+	u32_t row_offset;
+	u32_t col_offset;
+	u32_t scr_rows;
+	u32_t scr_cols;
+	u32_t num_rows;
+	i64_t dirty;
 	Erow *row;
 	char *filename;
 	char statusmsg[80];

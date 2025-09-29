@@ -11,8 +11,8 @@ void fileio_open(const char *filename) {
 	if (!fp) die("fopen");
 
 	char *line = NULL;
-	i64 linecap = 0;
-	i32 linelen;
+	i64_t linecap = 0;
+	i32_t linelen;
 	while ((linelen = getline_p(&line, &linecap, fp)) != -1) {
 		while (linelen > 0 && (line[linelen - 1] == '\n' ||
 													 line[linelen - 1] == '\r'))
@@ -28,7 +28,7 @@ void fileio_save() {
 		E.filename = input_prompt("Save as: %s");
 	}
 
-	u64 len;
+	u64_t len;
 	char *buf = fileio_rows_to_str(&len);
 	if (len > INT64_MAX) {
 		free(buf);
@@ -38,7 +38,7 @@ void fileio_save() {
 	int fd = open(E.filename, O_RDWR | O_CREAT, 0644);
 	if (fd != -1) {
 		if (ftruncate(fd, len) != -1) {
-			if (write(fd, buf, len) == (i64)len) {
+			if (write(fd, buf, len) == (i64_t)len) {
 				close(fd);
 				free(buf);
 				E.dirty = 0;
@@ -51,9 +51,9 @@ void fileio_save() {
 	free(buf);
 	output_set_statusmsg("Can't save! I/O error: %s", strerror(errno));
 }
-char *fileio_rows_to_str(u64 *buflen) {
-	u64 totlen = 0;
-	for (u32 j = 0; j < E.num_rows; j++) {
+char *fileio_rows_to_str(u64_t *buflen) {
+	u64_t totlen = 0;
+	for (u32_t j = 0; j < E.num_rows; j++) {
 		totlen += E.row[j].size + 1;
 	}
 	*buflen = totlen;
@@ -63,7 +63,7 @@ char *fileio_rows_to_str(u64 *buflen) {
 	die_if(buf == NULL);
 
 	char *p = buf;
-	for (u32 j = 0; j < E.num_rows; j++) {
+	for (u32_t j = 0; j < E.num_rows; j++) {
 		memcpy(p, E.row[j].data, E.row[j].size);
 		p += E.row[j].size;
 		*p++ = '\n';

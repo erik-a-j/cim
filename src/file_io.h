@@ -23,6 +23,6 @@
 /*** forward declarations ***/
 void fileio_open(const char *s);
 void fileio_save();
-char *fileio_rows_to_str(u64 *l);
+char *fileio_rows_to_str(u64_t *l);
 
 #endif /*FILE_IO_H*/

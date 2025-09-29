@@ -24,7 +24,7 @@ void editor_insert_newline() {
   ++E.cy;
   E.cx = 0;
 }
-void editor_del_char(u32 *i) {
+void editor_del_char(u32_t *i) {
   if (E.cy == E.num_rows) return;
   Erow *row = &E.row[E.cy];
 

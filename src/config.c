@@ -49,8 +49,8 @@ void config_init() {
 	ab_init(&ab, 64);
 
 	char *line = NULL;
-	i64 linecap = 0;
-	i32 linelen;
+	i64_t linecap = 0;
+	i32_t linelen;
 	while ((linelen = getline_p(&line, &linecap, fp)) != -1) {
 		LOG("%s\n", line);
 		ab_append(&ab, line, linelen);
@@ -63,10 +63,10 @@ void config_init() {
 	const char *tabsize_s = config_get_value(ab.b, "tabsize");
 	LOG("%s\n", tabsize_s);
 	if (tabsize_s) {
-		u64 tabsize = strtoull(tabsize_s, &endptr, 10);
+		u64_t tabsize = strtoull(tabsize_s, &endptr, 10);
 		if (endptr != tabsize_s && *endptr == '\0') {
 			if (tabsize <= UINT8_MAX) {
-				RC.tabsize = (u8)tabsize;
+				RC.tabsize = (u8_t)tabsize;
 			}
 		}
 	}

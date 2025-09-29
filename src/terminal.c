@@ -68,7 +68,7 @@ void enable_raw_mode() {
 }
 #endif
 #ifdef _WIN32
-int get_window_size(u32 *rows, u32 *cols) {
+int get_window_size(u32_t *rows, u32_t *cols) {
   CONSOLE_SCREEN_BUFFER_INFO csbi;
   if (!GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi))
     return 0;
@@ -77,7 +77,7 @@ int get_window_size(u32 *rows, u32 *cols) {
   return 1;
 }
 #else
-int get_window_size(u32 *rows, u32 *cols) {
+int get_window_size(u32_t *rows, u32_t *cols) {
 	struct winsize ws;
 
 	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1 || ws.ws_col == 0) {

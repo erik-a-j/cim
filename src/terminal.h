@@ -33,7 +33,7 @@
 noreturn void die(const char *s);
 void disable_raw_mode();
 void enable_raw_mode();
-int get_window_size(u32 *rows, u32 *cols);
+int get_window_size(u32_t *rows, u32_t *cols);
 int terminal_read_key();
 
 #endif /*TERMINAL_H*/

@@ -24,6 +24,6 @@
 #define NORMAL_KEY(k) ((k) + EM_NORMAL)
 #define NORMAL_CTRL_KEY(k) (NORMAL_KEY(CTRL_KEY((k))))
 
-
+#define SEQ_MOVE_FMT "\x1b[%d;%dH"
 
 #endif /*UTIL_H*/

@@ -3,7 +3,7 @@
 
 int cursor_get_pos(int *y, int *x) {
 	char buf[32];
-	u32 i = 0;
+	u32_t i = 0;
   if (write(STDOUT_FILENO, "\x1b[6n", 4) != 4) return -1;
   printf("\r\n");
 	while (i < sizeof(buf) - 1) {
@@ -17,7 +17,7 @@ int cursor_get_pos(int *y, int *x) {
 
 	return 0;
 }
-void cursor_move(abuf *ab, u32 y, u32 x) {
+void cursor_move(abuf *ab, u32_t y, u32_t x) {
   ab_fmt_append(ab, "\x1b[%d;%dH", y + 1, x + 1);
 }
 void cursor_move_relative(abuf *ab, int y, int x) {
@@ -25,7 +25,7 @@ void cursor_move_relative(abuf *ab, int y, int x) {
   if (cursor_get_pos(&cur_y, &cur_x) != 0) return;
 
   cursor_move(ab,
-      (u32)((cur_y + y >= 0)? cur_y + y : 0),
-      (u32)((cur_x + x >= 0)? cur_y + x : 0));
+      (u32_t)((cur_y + y >= 0)? cur_y + y : 0),
+      (u32_t)((cur_x + x >= 0)? cur_y + x : 0));
 
 }

@@ -23,17 +23,17 @@ void output_scroll() {
 	}
 }
 void output_draw_rows(abuf *ab) {
-	for (u32 y = 0; y < E.scr_rows; y++) {
+	for (u32_t y = 0; y < E.scr_rows; y++) {
 		ab_append(ab, "\x1b[K", 3);
-		u32 filerow = y + E.row_offset;
+		u32_t filerow = y + E.row_offset;
 		if (filerow >= E.num_rows) {
 			if (E.num_rows == 0 && y == E.scr_rows / 3) {
 				char welcome[40];
-				u32 welcomelen = snprintf(welcome, sizeof(welcome),
+				u32_t welcomelen = snprintf(welcome, sizeof(welcome),
 						"Cim editor -- version %s", CIM_VERSION);
 				if (welcomelen > E.scr_cols) welcomelen = E.scr_cols;
 
-				u32 padding = (E.scr_cols - welcomelen) / 2;
+				u32_t padding = (E.scr_cols - welcomelen) / 2;
 				if (padding) {
 					ab_append(ab, "~", 1);
 					--padding;
@@ -44,9 +44,9 @@ void output_draw_rows(abuf *ab) {
 				ab_append(ab, "~", 1);
 			}
 		} else {
-			i32 len = E.row[filerow].rsize - E.col_offset;
+			i32_t len = E.row[filerow].rsize - E.col_offset;
 			if (len < 0) len = 0;
-			if (len > (i32)E.scr_cols) len = (i32)E.scr_cols;
+			if (len > (i32_t)E.scr_cols) len = (i32_t)E.scr_cols;
 			ab_append(ab, &E.row[filerow].render[E.col_offset], len);
 		}
 		//if (y < E.scr_rows - 1) {
@@ -57,23 +57,23 @@ void output_draw_rows(abuf *ab) {
 void output_draw_status_bar(abuf *ab) {
 	ab_append(ab, "\x1b[7m", 4);
 	char status[80], rstatus[80], mstatus[20];
-	i64 len = snprintf(status, sizeof(status), "%.20s - %u lines %s ",
+	i64_t len = snprintf(status, sizeof(status), "%.20s - %u lines %s ",
 			(E.filename)? E.filename : "[No Name]",
 			E.num_rows,
 			(E.dirty)? "(modified)" : "");
-	i64 rlen = snprintf(rstatus, sizeof(rstatus), "%u/%u",
+	i64_t rlen = snprintf(rstatus, sizeof(rstatus), "%u/%u",
 			E.cy + 1, E.num_rows);
-	i64 mlen = snprintf(mstatus, sizeof(mstatus), "--%s--",
+	i64_t mlen = snprintf(mstatus, sizeof(mstatus), "--%s--",
 			(E.mode == EM_NORMAL)? "NORMAL" : "INSERT");
 
-	if (len > (i64)E.scr_cols) len = E.scr_cols;
+	if (len > (i64_t)E.scr_cols) len = E.scr_cols;
 	ab_append(ab, status, len);
 
-	if (mlen > (i64)E.scr_cols - len) mlen = E.scr_cols - len;
+	if (mlen > (i64_t)E.scr_cols - len) mlen = E.scr_cols - len;
 	ab_append(ab, mstatus, mlen);
 
-	i64 llen = len + mlen;
-	while (llen < (i64)E.scr_cols) {
+	i64_t llen = len + mlen;
+	while (llen < (i64_t)E.scr_cols) {
 		if (E.scr_cols - llen == rlen) {
 			ab_append(ab, rstatus, rlen);
 			break;
@@ -87,7 +87,7 @@ void output_draw_status_bar(abuf *ab) {
 }
 void output_draw_statusmsg_bar(abuf *ab) {
 	ab_append(ab, "\x1b[K", 3);
-	u32 msglen = strlen(E.statusmsg);
+	u32_t msglen = strlen(E.statusmsg);
 	if (msglen > E.scr_cols) msglen = E.scr_cols;
 	if (msglen && time(NULL) - E.statusmsg_time < 5) {
 		ab_append(ab, E.statusmsg, msglen);

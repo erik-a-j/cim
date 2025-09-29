@@ -16,13 +16,13 @@
 
 
 /*** forward declarations ***/
-void row_insert(u32 at, const char *s, u32 l);
+void row_insert(u32_t at, const char *s, u32_t l);
 void row_free(Erow *r);
-void row_del(u32 at);
-void row_insert_char(Erow *r, u32 at, int c);
-void row_append_str(Erow *r, char *s, u32 l);
-void row_del_char(Erow *r, u32 at);
+void row_del(u32_t at);
+void row_insert_char(Erow *r, u32_t at, int c);
+void row_append_str(Erow *r, char *s, u32_t l);
+void row_del_char(Erow *r, u32_t at);
 void row_update(Erow *r);
-int row_cx_to_rx(Erow *r, u32 cx);
+int row_cx_to_rx(Erow *r, u32_t cx);
 
 #endif /*ROW_OPERATIONS_H*/

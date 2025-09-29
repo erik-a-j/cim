@@ -17,13 +17,13 @@
 
 typedef struct abuf {
 	char *b;
-	u64 len;
-	u64 cap;
+	u64_t len;
+	u64_t cap;
 } abuf;
 
 /*** forward declarations ***/
-void ab_init(abuf *ab, u64 size);
-int ab_append(abuf *ab, const char *s, u64 l);
+void ab_init(abuf *ab, u64_t size);
+int ab_append(abuf *ab, const char *s, u64_t l);
 int ab_fmt_append(abuf *ab, const char *fmt, ...);
 void ab_free(abuf *ab);
 

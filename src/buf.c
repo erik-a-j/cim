@@ -2,7 +2,7 @@
 #include "buf.h"
 
 /*** append buffer ***/
-void ab_init(abuf *ab, u64 size) {
+void ab_init(abuf *ab, u64_t size) {
 	ab->b = malloc(size);
 	die_if(ab->b == NULL);
 	ab->len = 0;
@@ -11,9 +11,9 @@ void ab_init(abuf *ab, u64 size) {
 void ab_free(abuf *ab) {
 	if (ab) free(ab->b);
 }
-int ab_append(abuf *ab, const char *s, u64 len) {
+int ab_append(abuf *ab, const char *s, u64_t len) {
 	if (ab->cap < ab->len + len) {
-		u64 new_cap = (ab->cap)? ab->cap * 2 : 8;
+		u64_t new_cap = (ab->cap)? ab->cap * 2 : 8;
 		while (new_cap < ab->len + len) new_cap <<= 1;
 
 		char *new = realloc(ab->b, new_cap);

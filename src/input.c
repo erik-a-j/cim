@@ -4,11 +4,11 @@
 
 /*** input ***/
 char *input_prompt(char *prompt) {
-  u32 bufsize = 128;
+  u32_t bufsize = 128;
   char *buf = malloc(bufsize);
   die_if(buf == NULL);
 
-  u32 buflen = 0;
+  u32_t buflen = 0;
   buf[0] = '\0';
 
   while (1) {
@@ -33,7 +33,7 @@ char *input_prompt(char *prompt) {
 }
 void input_move_cursor(int key) {
 	Erow *row = (E.cy >= E.num_rows)? NULL : &E.row[E.cy];
-	u32 mode = (E.mode)? 1 : 0;
+	u32_t mode = (E.mode)? 1 : 0;
 	switch (key) {
 		case ARROW_LEFT:
 			if (E.cx != 0) {
@@ -84,7 +84,7 @@ void input_move_cursor(int key) {
 	}
 
 	row = (E.cy >= E.num_rows)? NULL : &E.row[E.cy];
-	u32 rowlen = (row)? row->size : 0;
+	u32_t rowlen = (row)? row->size : 0;
 	if (E.cx > rowlen) {
 		E.cx = (E.mode && rowlen > 0)? rowlen - 1 : rowlen;
 	}

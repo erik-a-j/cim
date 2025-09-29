@@ -38,14 +38,14 @@ static inline int ftruncate_win(int fd, long long length) {
 }
 #endif /*_WIN32*/
 
-static inline i64 getline_p(char **lineptr, i64 *n, FILE *fp) {
+static inline i64_t getline_p(char **lineptr, i64_t *n, FILE *fp) {
   if (!lineptr || !n || !fp) {
     errno = EINVAL;
     return -1;
   }
 
   char *buf = *lineptr;
-  i64 cap = *n;
+  i64_t cap = *n;
 
   if (buf == NULL || cap == 0) {
     cap = 128;
@@ -56,7 +56,7 @@ static inline i64 getline_p(char **lineptr, i64 *n, FILE *fp) {
     }
   }
 
-  i64 len = 0;
+  i64_t len = 0;
 
   for (;;) {
     int ch = fgetc(fp);
@@ -76,7 +76,7 @@ static inline i64 getline_p(char **lineptr, i64 *n, FILE *fp) {
       ch = '\n';
     }
     if (len + 1 >= cap) {
-      i64 newcap = (cap < 256)? (cap * 2) : (cap + cap / 2);
+      i64_t newcap = (cap < 256)? (cap * 2) : (cap + cap / 2);
       char *newbuf = realloc(buf, newcap);
       if (!newbuf) {
         errno = ENOMEM;
