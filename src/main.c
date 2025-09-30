@@ -2,8 +2,8 @@
 #include "main.h"
 
 /*** global variables ***/
-EditorConfig E;
-CimRC RC;
+editor_t E;
+cfg_t RC;
 FILE *logfp;
 #ifdef _WIN32
 	DWORD orig_term_in;
@@ -47,25 +47,8 @@ int main(int argc, char *argv[]) {
 
 	output_set_statusmsg("HELP: Ctrl+S = save | Ctrl+Q = quit");
 
-		box_t box;
-		box_init(&box);
-		box_set_prompt(&box, "do you want to continue?");
-		box.height = 10;
-		box.width = 40;
-		box.flags |= (B_CENTERED |  B_COLOR_INV | B_IN_T_YN);
-		box_compute(&box);
-		//LOG("%s\n", box.prompt);
-		LOG("%.*s\n", (int)box._.ab.len, box._.ab.b);
-		write(STDOUT_FILENO, box._.ab.b, box._.ab.len);
-		box_free(&box);
-		char c;
-		while (read(STDIN_FILENO, &c, 1) != 1);
-
 	while (1) {
 		output_refresh_screen();
-
-
-
 		input_process_keypress();
 	}
 	return 0;

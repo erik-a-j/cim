@@ -4,11 +4,11 @@
 
 /*** defines ***/
 #define CIM_VERSION "0.0.1"
-#define LOG(f, ...) do {                              \
-  if (logfp) {                                        \
-    fprintf(logfp, "%4d|"f, __LINE__, ##__VA_ARGS__); \
-    fflush(logfp);                                    \
-  }                                                   \
+#define LOG(f, ...) do {                              								   \
+  if (logfp) {                                        								   \
+    fprintf(logfp, "%4d|"f"%35s();\n", __LINE__, ##__VA_ARGS__, __func__); \
+    fflush(logfp);                                    								   \
+  }                                                   								   \
 } while (0)
 #define die_if(cond) do {                                       \
 	if ((cond)) {                                                 \
@@ -20,8 +20,10 @@
 		die(tmp_dbgmsg);                                            \
 	}                                                             \
 } while (0)
+
 #define CTRL_KEY(k) ((k) & 0x1F)
 #define NORMAL_KEY(k) ((k) + EM_NORMAL)
+#define VISUAL_KEY(k) ((k) + EM_VISUAL)
 #define NORMAL_CTRL_KEY(k) (NORMAL_KEY(CTRL_KEY((k))))
 
 #define SEQ_MOVE_FMT "\x1b[%d;%dH"

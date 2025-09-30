@@ -1,5 +1,5 @@
 #define INPUT_IMPL
-#define g_ECONFIG
+#define g_EDITOR
 #include "input.h"
 
 /*** input ***/
@@ -15,8 +15,14 @@ char *input_prompt(char *prompt) {
     output_set_statusmsg(prompt, buf);
     output_refresh_screen();
 
-    int c = terminal_read_key() - E.mode;
-    if (c == '\r') {
+    int c = terminal_read_key();
+		if (c == BACKSPACE) {
+			if (buflen != 0) buf[--buflen] = '\0';
+		} else if (c == '\x1b') {
+			output_set_statusmsg("");
+			free(buf);
+			return NULL;
+		} else if (c == '\r') {
       if (buflen != 0) {
         output_set_statusmsg("");
         return buf;
@@ -32,10 +38,11 @@ char *input_prompt(char *prompt) {
   }
 }
 void input_move_cursor(int key) {
-	Erow *row = (E.cy >= E.num_rows)? NULL : &E.row[E.cy];
+	editor_row_t *row = (E.cy >= E.num_rows)? NULL : &E.row[E.cy];
 	u32_t mode = (E.mode)? 1 : 0;
 	switch (key) {
 		case ARROW_LEFT:
+		case MOVE_LEFT:
 			if (E.cx != 0) {
 				--E.cx;
 			} else if (E.cy > 0) {
@@ -43,30 +50,11 @@ void input_move_cursor(int key) {
 				E.cx = E.row[E.cy].size - mode;
 			}
 			break;
-		case MOVE_LEFT:
-			if (E.cx != 0) {
-				--E.cx;
-			} else if (!E.mode && E.cy > 0) {
-				--E.cy;
-				E.cx = E.row[E.cy].size;
-			}
-			break;
 		case ARROW_RIGHT:
-			if (row && E.cx < row->size - mode) {
-				++E.cx;
-			} else if (row && E.cx == row->size - mode) {
-				++E.cy;
-				E.cx = 0;
-			}
-			break;
 		case MOVE_RIGHT:
-			if (E.mode) {
-				if (row && E.cx < row->size - 1) {
-					++E.cx;
-				}
-			} else if (row && E.cx < row->size) {
+			if (row && row->size && E.cx != row->size - mode) {
 				++E.cx;
-			} else if (row && E.cx == row->size) {
+			} else if (E.cy < E.num_rows) {
 				++E.cy;
 				E.cx = 0;
 			}
@@ -85,7 +73,7 @@ void input_move_cursor(int key) {
 
 	row = (E.cy >= E.num_rows)? NULL : &E.row[E.cy];
 	u32_t rowlen = (row)? row->size : 0;
-	if (E.cx > rowlen) {
+	if (!rowlen || E.cx > rowlen - mode) {
 		E.cx = (E.mode && rowlen > 0)? rowlen - 1 : rowlen;
 	}
 }
@@ -93,9 +81,9 @@ void input_process_keypress() {
 	static int quit_times = 1;
 	int c = terminal_read_key();
   
-	LOG("key: %c,%d,%d\n", c, c, c - E.mode);
+	LOG("key: %c,%d,%d", c, c, (c | E.mode));
 
-	switch (c) {
+	switch (c | E.mode) {
 		case '\r':
 			editor_insert_newline();
 			break;
@@ -118,7 +106,7 @@ void input_process_keypress() {
 		case '\x1b':
 			if (E.mode == EM_INSERT) {
 				E.mode = EM_NORMAL;
-				Erow *row = (E.cy >= E.num_rows)? NULL : &E.row[E.cy];
+				editor_row_t *row = (E.cy >= E.num_rows)? NULL : &E.row[E.cy];
 				if (row && E.cx == row->size) {
 					input_move_cursor(MOVE_LEFT);
 				}
@@ -150,7 +138,7 @@ void input_process_keypress() {
 		case MOVE_DOWN:   /* fall through */
 		case MOVE_LEFT:   /* fall through */
 		case MOVE_RIGHT:
-			input_move_cursor(c);
+			input_move_cursor(c | E.mode);
 			break;
 		case PAGE_UP: /* fall through */
 		case PAGE_DOWN:

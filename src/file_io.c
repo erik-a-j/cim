@@ -1,5 +1,5 @@
 #define FILE_IO_IMPL
-#define g_ECONFIG
+#define g_EDITOR
 #include "file_io.h"
  
 /*** file i/o ***/
@@ -26,6 +26,7 @@ void fileio_open(const char *filename) {
 void fileio_save() {
 	if (E.filename == NULL) {
 		E.filename = input_prompt("Save as: %s");
+		if (E.filename == NULL) return;
 	}
 
 	u64_t len;

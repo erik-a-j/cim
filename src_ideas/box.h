@@ -77,6 +77,7 @@ static inline void box_draw_body(box_t *st);
 static inline int box_apply(B_COLOR_INV)(box_t *st);
 static inline int box_apply(B_CENTERED)(box_t *st);
 static inline int box_apply(B_IN_T_YN)(box_t *st);
+static inline int box_apply(B_IN_T_STR)(box_t *st);
 
 
 

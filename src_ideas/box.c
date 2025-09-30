@@ -1,5 +1,5 @@
 #define BOX_IMPL
-#define g_ECONFIG
+#define g_EDITOR
 #include "box.h"
 
 /*** box ***/
@@ -40,6 +40,8 @@ void box_set_prompt(box_t *st, const char *fmt, ...) {
 static inline int box_compute_flags(box_t *st) {
   if_flag_and_apply(B_COLOR_INV);
   if_flag_and_apply(B_CENTERED);
+  if_flag_and_apply(B_IN_T_YN);
+  if_flag_and_apply(B_IN_T_STR);
   return 0;
 }
 int box_compute(box_t *st) {
@@ -62,20 +64,24 @@ void box_draw(box_t *st) {
   box_draw_input(st);
 }
 static inline void box_draw_input(box_t *st) {
+  abuf *ab = &st->_.ab;
   struct box_input_t *in = &st->_.in_t;
+
   if (st->flags & B_IN_T_YN) {
     u64_t y_len = strlen(in->yn.y);
     u64_t n_len = strlen(in->yn.n);
-    u64_t len = y_len + 1 + n_len;
+    u64_t len = y_len + 2 + n_len;
     if (len > st->width) len = st->width;
 
     u32_t in_y = st->_.box_sy + (st->height / 2);
     u32_t in_x = st->_.box_sx + (st->width - len) / 2;
-    cursor_move(&st->_.ab, in_y, in_x);
+    cursor_move(ab, in_y, in_x);
 
-    ab_append(&st->_.ab, in->yn.y, y_len);
-    ab_append(&st->_.ab, " ", 1);
-    ab_append(&st->_.ab, in->yn.n, n_len);
+    ab_append(ab, "\x1b[m", 3);
+    ab_append(ab, in->yn.y, y_len);
+    ab_append(ab, "\x1b[7m", 4);
+    ab_append(ab, "  ", 2);
+    ab_append(ab, in->yn.n, n_len);
   }
 }
 static inline void box_draw_prompt(box_t *st) {

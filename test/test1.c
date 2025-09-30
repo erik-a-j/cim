@@ -19,31 +19,42 @@ typedef uint64_t u64_t;
 
 #define IS_FLAG(a, flag) printf(#a" & "#flag" == %s\n", (a & flag)? "TRUE" : "FALSE")
 
-#define print_bitidx(flag) printf(#flag" bit index == %d\n", __builtin_ctzll(flag))
+typedef enum editor_mode_t {
+	EM_INSERT = 0,
+	EM_NORMAL = 0x400,
+	EM_VISUAL = 0x800
+} editor_mode_t;
 
-const char *aaa[4] = {
-	[__builtin_ctzll(CC)] = "hello",
-	[__builtin_ctzll(BB)] = "NO",
-	[__builtin_ctzll(AA)] = "yeeee",
-	[__builtin_ctzll(DD)] = "ssddsds",
-};
+typedef enum {
+	E_KFLAG_ESCSEQ = 1 << 0,
+	E_KFLAG_CTRL = 1 << 1,
+	E_KFLAG_SHFT = 1 << 2,
+	E_KFLAG_ALT = 1 << 3
+} keyflags_t;
+
+typedef struct editor_keys_t {
+	const u8_t *const seq;
+	const u8_t *const endptr;
+	const u8_t bytes_read;
+	const keyflags_t flags;
+} editor_keys_t;
+
+
+editor_keys_t test() {
+	static u8_t seq[3];
+	seq[0] = 1;
+	seq[1] = 2;
+	seq[2] = 3;
+	editor_keys_t ed = {
+		.seq = &seq[0],
+		.endptr = seq + 3
+	};
+	return ed;
+}
 
 int main() {
-	u64_t a = 0;
-	printf("0 %% 2 = %d\n", 0 % 2);
-	a |= (AA | CC);
-	if (~a & BB) printf("BB not set\n");
-	printf("%lu\n", a);
-	IS_FLAG(a, AA);
-	IS_FLAG(a, BB);
-	IS_FLAG(a, CC);
-	IS_FLAG(a, DD);
-	print_bitidx(AA);
-	print_bitidx(BB);
-	print_bitidx(CC);
-	print_bitidx(DD);
-	printf("%s\n", aaa[__builtin_ctzll(AA)]);
-	printf("%s\n", aaa[__builtin_ctzll(BB)]);
-	printf("%s\n", aaa[__builtin_ctzll(CC)]);
-	printf("%s\n", aaa[__builtin_ctzll(DD)]);
+	editor_keys_t ed = test();
+	for (const u8_t *a = ed.seq; a != ed.endptr; a++) {
+		printf("%p, %u\n", a, *a);
+	}
 }

@@ -1,5 +1,5 @@
 #define EDITOR_OPERATIONS_IMPL
-#define g_ECONFIG
+#define g_EDITOR
 #include "editor_operations.h"
 
 /*** editor operations ***/
@@ -14,7 +14,7 @@ void editor_insert_newline() {
   if (E.cx == 0) {
     row_insert(E.cy, "", 0);
   } else {
-    Erow *row = &E.row[E.cy];
+    editor_row_t *row = &E.row[E.cy];
     row_insert(E.cy + 1, &row->data[E.cx], row->size - E.cx);
     row = &E.row[E.cy];
     row->size = E.cx;
@@ -26,7 +26,7 @@ void editor_insert_newline() {
 }
 void editor_del_char(u32_t *i) {
   if (E.cy == E.num_rows) return;
-  Erow *row = &E.row[E.cy];
+  editor_row_t *row = &E.row[E.cy];
 
   if (i && *i < row->size) {
     row_del_char(row, *i);

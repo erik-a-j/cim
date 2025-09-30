@@ -1,5 +1,5 @@
 #define OUTPUT_IMPL
-#define g_ECONFIG
+#define g_EDITOR
 #include "output.h"
 
 /*** output ***/
