@@ -2,10 +2,6 @@ SRCDIR := src
 OBJDIR := build
 
 # ---- Toolchain selection -----------------------------------------------------
-# Usage:
-#   make                        # native (gcc)
-#   make TOOLCHAIN=mingw        # cross-compile to Windows (x86_64 by default)
-#   make TOOLCHAIN=mingw ARCH=i686  # 32-bit Windows
 TOOLCHAIN ?= native
 ARCH ?= x86_64
 
@@ -19,22 +15,18 @@ CC      := $(CROSS_PREFIX)gcc
 STRIP   := $(CROSS_PREFIX)strip
 EXEEXT  := .exe
 CFLAGS  += -m64 -D_WIN32 -D_WIN32_WINNT=0x0A00 -D__USE_MINGW_ANSI_STDIO=1
-# Add Windows-specific libs only if you use them (examples):
-# LDLIBS  += -lws2_32 -luser32 -lkernel32
 else
 CC      := gcc
 EXEEXT  :=
 endif
 
-
-
-# ---- source/object lists -----------------------------------------------------
-SRC  := $(wildcard $(SRCDIR)/*.c)
+# ---- sources/objects (include top-level and one-level subdirs) --------------
+SRC  := $(wildcard $(SRCDIR)/*.c) $(wildcard $(SRCDIR)/*/*.c)
 OBJ  := $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRC))
 DEPS := $(OBJ:.o=.d)
 
-# Final binary name adapts to Windows
-BIN := cim$(EXEEXT)
+# Final binary
+BIN := main$(EXEEXT)
 
 .PHONY: all clean temps run windows64 windows32 strip
 all: $(BIN)
@@ -45,7 +37,8 @@ $(BIN): $(OBJ)
 
 # ---- compile (ensure OBJDIR exists first) -----------------------------------
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
-	$(CC) $(CFLAGS) -c -o $@ $<
+	@mkdir -p $(dir $@)
+	$(CC) $(INC) $(CFLAGS) -c -o $@ $<
 
 $(OBJDIR):
 	@mkdir -p $@
@@ -59,12 +52,11 @@ run: $(BIN)
 		./$(BIN); \
 	fi
 
-# Strip size (esp. handy for Windows builds)
 strip: $(BIN)
 	@if [ -n "$(STRIP)" ]; then $(STRIP) -s $(BIN); else strip -s $(BIN); fi
 
 clean:
-	rm -f cim cim.exe $(OBJDIR)/*.o $(OBJDIR)/*.i $(OBJDIR)/*.s $(OBJDIR)/*.d
+	rm -f $(BIN) $(OBJDIR)/*.o $(OBJDIR)/*/*.o $(OBJDIR)/*.i $(OBJDIR)/*/*.i $(OBJDIR)/*.s $(OBJDIR)/*/*.s $(OBJDIR)/*.d $(OBJDIR)/*/*.d
 
 temps:
 	@$(MAKE) clean

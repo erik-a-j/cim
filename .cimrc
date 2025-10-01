@@ -1,12 +1,2 @@
-nmap <C-c> a
-nmap <C-c> c
-nmap <C-c> d
-nmap <C-c> r
-nmap <C-c> t
-nmap <C-c> j
-nmap <C-c> h
-nmap <C-c> d
-nmap <C-c> c
-nmap <C-c> x
-nmap <C-c> z
+nmap u k
 tabsize 2

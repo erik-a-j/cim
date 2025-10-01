@@ -19,7 +19,7 @@
 #endif /*defined(g_EDITOR) || defined(g_ALL)*/
 
 #if defined(g_CONFIG) || defined(g_ALL)
-  #include "../config.h"
+  #include "../config/config.h"
   extern cfg_t RC;
 #endif /*defined(g_CONFIG) || defined(g_ALL)*/
 

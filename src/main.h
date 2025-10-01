@@ -19,7 +19,7 @@
 #include "utils/portable.h"
 #include "buf.h"
 //#include "box.h"
-#include "config.h"
+#include "config/config.h"
 #include "file_io.h"
 #include "input.h"
 #include "output.h"

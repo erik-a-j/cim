@@ -117,6 +117,7 @@ int main() {
   clear();
   restore_cursor_pos();
 
+	char last_ch = 0;
 	while (1) {	
 		editor_keys_t k = terminal_read_key();
 		if (!k.seq) break;
@@ -130,7 +131,8 @@ int main() {
 		}
 		printf("val: %d\r\n", val);
 		printf("bytes read: %d\r\n", k.len);
-		if (k.seq[0] == 'q') break;
+		if (k.seq[0] == 'q' && last_ch == 'q') break;
+		last_ch = k.seq[0];
 	}
 
   disable_raw_mode();

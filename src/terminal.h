@@ -35,5 +35,6 @@ void disable_raw_mode();
 void enable_raw_mode();
 int get_window_size(u32_t *rows, u32_t *cols);
 int terminal_read_key();
+int terminal_read_key_raw(char *buf, int bufsize);
 
 #endif /*TERMINAL_H*/

@@ -19,8 +19,19 @@ void cmd_find_callback(char *query, int key) {
   }
 }
 void cmd_find() {
+  u32_t sav_cx = E.cx;
+  u32_t sav_cy = E.cy;
+  u32_t sav_col_offset = E.col_offset;
+  u32_t sav_row_offset = E.row_offset;
+  
   char *query = input_prompt("Search: %s (ESC to cancel)", cmd_find_callback);
+
   if (query) {
     free(query);
+  } else {
+    E.cx = sav_cx;
+    E.cy = sav_cy;
+    E.col_offset = sav_col_offset;
+    E.row_offset = sav_row_offset;
   }
 }
