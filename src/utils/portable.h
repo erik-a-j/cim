@@ -38,6 +38,7 @@ static inline int ftruncate_win(int fd, long long length) {
 }
 #endif /*_WIN32*/
 
+#ifdef EXPERIMENTAL_p
 static inline i64_t getline_p(char **lineptr, i64_t *n, FILE *fp) {
   if (!lineptr || !n || !fp) {
     errno = EINVAL;
@@ -69,12 +70,34 @@ static inline i64_t getline_p(char **lineptr, i64_t *n, FILE *fp) {
       break;
     }
     if (ch == '\r') {
+      // Peek one more to detect CRLF. Handle errors carefully.
       int next = fgetc(fp);
-      if (next != '\n' && next != EOF) {
-        ungetc(next, fp);
+      if (next == EOF) {
+        if (ferror(fp)) {
+          // Read error while peeking; report failure.
+          return -1;
+        }
+        // EOF after CR -> treat CR as newline and finish line.
+        ch = '\n';
+      } else {
+        if (next != '\n') {
+          // Put it back if it's not LF. ungetc can fail only on error or EOF,
+          // but here next != EOF, so check its return value just in case.
+          if (ungetc(next, fp) == EOF) {
+            // Stream is in a bad state; report error.
+            return -1;
+          }
+        }
+        ch = '\n';
       }
-      ch = '\n';
     }
+    //if (ch == '\r') {
+    //  int next = fgetc(fp);
+    //  if (next != '\n' && next != EOF) {
+    //    ungetc(next, fp);
+    //  }
+    //  ch = '\n';
+    //}
     if (len + 1 >= cap) {
       i64_t newcap = (cap < 256)? (cap * 2) : (cap + cap / 2);
       char *newbuf = realloc(buf, newcap);
@@ -98,5 +121,5 @@ static inline i64_t getline_p(char **lineptr, i64_t *n, FILE *fp) {
   *n = cap;
   return len;
 }
-
+#endif /*EXPERIMENTAL_p*/
 #endif /*PORTABLE_H*/

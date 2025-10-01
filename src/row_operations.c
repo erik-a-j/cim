@@ -81,7 +81,7 @@ void row_update(editor_row_t *row) {
 	row->render[idx] = '\0';
 	row->rsize = idx;
 }
-int row_cx_to_rx(editor_row_t *row, u32_t cx) {
+u32_t row_cx_to_rx(editor_row_t *row, u32_t cx) {
 	u32_t rx = 0;
 	for (u32_t j = 0; j < cx; j++) {
 		if (row->data[j] == '\t') {
@@ -90,4 +90,16 @@ int row_cx_to_rx(editor_row_t *row, u32_t cx) {
 		++rx;
 	}
 	return rx;
+}
+u32_t row_rx_to_cx(editor_row_t *row, u32_t rx) {
+	u32_t cur_rx = 0;
+	u32_t cx;
+	for (cx = 0; cx < row->size; cx++) {
+		if (row->data[cx] == '\t') {
+			cur_rx += (RC.tabsize - 1) - (cur_rx % RC.tabsize);
+		}
+		++cur_rx;
+		if (cur_rx > rx) return cx;
+	}
+	return cx;
 }

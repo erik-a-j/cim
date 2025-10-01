@@ -23,6 +23,7 @@ void row_insert_char(editor_row_t *r, u32_t at, int c);
 void row_append_str(editor_row_t *r, char *s, u32_t l);
 void row_del_char(editor_row_t *r, u32_t at);
 void row_update(editor_row_t *r);
-int row_cx_to_rx(editor_row_t *r, u32_t cx);
+u32_t row_cx_to_rx(editor_row_t *r, u32_t cx);
+u32_t row_rx_to_cx(editor_row_t *r, u32_t rx);
 
 #endif /*ROW_OPERATIONS_H*/

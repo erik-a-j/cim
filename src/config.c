@@ -57,7 +57,7 @@ void config_init() {
 		return;
 	}
 
-	for (u32_t i = 0; i < RC.keymap.num_pairs; i++) {
+	for (int i = 0; i < RC.keymap.num_pairs; i++) {
 		LOG("keymap: %s, %s", RC.keymap.pairs[i][0].seq, RC.keymap.pairs[i][1].seq);
 	}
 	free(RC.keymap.pairs);
@@ -96,9 +96,9 @@ int config_load(abuf *ab, const char *path) {
 	if (!fp) return -1;
 
 	char *line = NULL;
-	i64_t linecap = 0;
-	i32_t linelen;
-	while ((linelen = getline_p(&line, &linecap, fp)) != -1) {
+	u64_t linecap = 0;
+	i64_t linelen;
+	while ((linelen = getline(&line, &linecap, fp)) != -1) {
 		LOG("%s", line);
 		ab_append(ab, line, linelen);
 	}

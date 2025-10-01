@@ -8,7 +8,7 @@
   #include <stdio.h>
   #include <stdlib.h>
   #include <string.h>
-  #include "utils/portable.h"
+  //#include "utils/portable.h"
   #include "utils/editor.h"
   #include "buf.h"
 #endif

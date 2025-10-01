@@ -3,7 +3,7 @@
 #include "input.h"
 
 /*** input ***/
-char *input_prompt(char *prompt) {
+char *input_prompt(char *prompt, void (*callback)(char *, int)) {
   u32_t bufsize = 128;
   char *buf = malloc(bufsize);
   die_if(buf == NULL);
@@ -20,11 +20,13 @@ char *input_prompt(char *prompt) {
 			if (buflen != 0) buf[--buflen] = '\0';
 		} else if (c == '\x1b') {
 			output_set_statusmsg("");
+			if (callback) callback(buf, c);
 			free(buf);
 			return NULL;
 		} else if (c == '\r') {
       if (buflen != 0) {
         output_set_statusmsg("");
+				if (callback) callback(buf, c);
         return buf;
       }
     } else if (!iscntrl(c) && c < 128) {
@@ -35,6 +37,8 @@ char *input_prompt(char *prompt) {
       buf[buflen++] = c;
       buf[buflen] = '\0';
     }
+		
+		if (callback) callback(buf, c);
   }
 }
 void input_move_cursor(int key) {
@@ -159,6 +163,10 @@ void input_process_keypress() {
 		
 		case NORMAL_CTRL_KEY('l'):
 		case CTRL_KEY('l'):
+			break;
+
+		case NORMAL_KEY('/'):
+			cmd_find();
 			break;
 
 		default:

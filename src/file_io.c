@@ -11,9 +11,9 @@ void fileio_open(const char *filename) {
 	if (!fp) die("fopen");
 
 	char *line = NULL;
-	i64_t linecap = 0;
-	i32_t linelen;
-	while ((linelen = getline_p(&line, &linecap, fp)) != -1) {
+	u64_t linecap = 0;
+	i64_t linelen;
+	while ((linelen = getline(&line, &linecap, fp)) != -1) {
 		while (linelen > 0 && (line[linelen - 1] == '\n' ||
 													 line[linelen - 1] == '\r'))
 			--linelen;
@@ -25,7 +25,7 @@ void fileio_open(const char *filename) {
 }
 void fileio_save() {
 	if (E.filename == NULL) {
-		E.filename = input_prompt("Save as: %s");
+		E.filename = input_prompt("Save as: %s", NULL);
 		if (E.filename == NULL) return;
 	}
 
